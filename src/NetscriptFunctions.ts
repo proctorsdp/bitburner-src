@@ -110,7 +110,7 @@ export type NSFull = Readonly<Omit<NS & INetscriptExtra, "pid" | "args" | "enums
 export const ns: InternalAPI<NSFull> = {
   singularity: NetscriptSingularity(),
   gang: NetscriptGang(),
-  bladeburner: NetscriptBladeburner(),
+  bladeburner: NetscriptBladeburner,
   codingcontract: NetscriptCodingContract(),
   sleeve: NetscriptSleeve(),
   corporation: NetscriptCorporation(),
