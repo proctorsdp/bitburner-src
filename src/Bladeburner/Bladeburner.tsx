@@ -30,12 +30,12 @@ import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
 import { getTimestamp } from "../utils/helpers/getTimestamp";
 import { joinFaction } from "../Faction/FactionHelpers";
 import { WorkerScript } from "../Netscript/WorkerScript";
-import { FactionNames } from "../Faction/data/FactionNames";
+import { FactionName } from "../Faction/data/Enums";
 import { KEY } from "../utils/helpers/keyCodes";
 import { isSleeveInfiltrateWork } from "../PersonObjects/Sleeve/Work/SleeveInfiltrateWork";
 import { isSleeveSupportWork } from "../PersonObjects/Sleeve/Work/SleeveSupportWork";
 import { WorkStats, newWorkStats } from "../Work/WorkStats";
-import { CityName } from "../Enums";
+import { CityName } from "../data/Enums";
 import { getRandomMember } from "../utils/helpers/enum";
 
 export interface BlackOpsAttempt {
@@ -296,7 +296,7 @@ export class Bladeburner {
 
   prestige(): void {
     this.resetAction();
-    const bladeburnerFac = Factions[FactionNames.Bladeburners];
+    const bladeburnerFac = Factions[FactionName.Bladeburners];
     if (this.rank >= BladeburnerConstants.RankNeededForFaction) {
       joinFaction(bladeburnerFac);
     }
@@ -1610,12 +1610,12 @@ export class Bladeburner {
     }
     this.maxRank = Math.max(this.rank, this.maxRank);
 
-    const bladeburnersFactionName = FactionNames.Bladeburners;
+    const bladeburnersFactionName = FactionName.Bladeburners;
     if (factionExists(bladeburnersFactionName)) {
       const bladeburnerFac = Factions[bladeburnersFactionName];
       if (!bladeburnerFac) {
         throw new Error(
-          `Could not properly get ${FactionNames.Bladeburners} Faction object in ${FactionNames.Bladeburners} UI Overview Faction button`,
+          `Could not properly get ${FactionName.Bladeburners} Faction object in ${FactionName.Bladeburners} UI Overview Faction button`,
         );
       }
       if (bladeburnerFac.isMember) {
@@ -2363,12 +2363,12 @@ export class Bladeburner {
   }
 
   joinBladeburnerFactionNetscriptFn(workerScript: WorkerScript): boolean {
-    const bladeburnerFac = Factions[FactionNames.Bladeburners];
+    const bladeburnerFac = Factions[FactionName.Bladeburners];
     if (bladeburnerFac.isMember) {
       return true;
     } else if (this.rank >= BladeburnerConstants.RankNeededForFaction) {
       joinFaction(bladeburnerFac);
-      workerScript.log("bladeburner.joinBladeburnerFaction", () => `Joined ${FactionNames.Bladeburners} faction.`);
+      workerScript.log("bladeburner.joinBladeburnerFaction", () => `Joined ${FactionName.Bladeburners} faction.`);
       return true;
     } else {
       workerScript.log(

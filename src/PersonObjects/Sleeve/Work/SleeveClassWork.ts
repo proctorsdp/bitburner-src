@@ -1,11 +1,11 @@
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../../../utils/JSONReviver";
 import { applySleeveGains, Work, WorkType } from "./Work";
 import { Classes, ClassType } from "../../../Work/ClassWork";
-import { LocationName } from "../../../Enums";
+import { LocationName } from "../../../data/Enums";
 import { calculateClassEarnings } from "../../../Work/Formulas";
 import { Sleeve } from "../Sleeve";
 import { scaleWorkStats, WorkStats } from "../../../Work/WorkStats";
-import { GymType, UniversityClassType } from "../../../Enums";
+import { GymType, UniversityClassType } from "../../../data/Enums";
 import { checkEnum } from "../../../utils/helpers/enum";
 import { Locations } from "../../../Locations/Locations";
 

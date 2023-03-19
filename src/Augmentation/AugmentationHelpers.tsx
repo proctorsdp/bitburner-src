@@ -11,7 +11,7 @@ import { prestigeAugmentation } from "../Prestige";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { clearObject } from "../utils/helpers/clearObject";
 
-import { FactionNames } from "../Faction/data/FactionNames";
+import { FactionName } from "../Faction/data/Enums";
 import {
   initBladeburnerAugmentations,
   initChurchOfTheMachineGodAugmentations,
@@ -35,8 +35,8 @@ function createAugmentations(): void {
     initUnstableCircadianModulator(),
     ...initGeneralAugmentations(),
     ...initSoAAugmentations(),
-    ...(factionExists(FactionNames.Bladeburners) ? initBladeburnerAugmentations() : []),
-    ...(factionExists(FactionNames.ChurchOfTheMachineGod) ? initChurchOfTheMachineGodAugmentations() : []),
+    ...(factionExists(FactionName.Bladeburners) ? initBladeburnerAugmentations() : []),
+    ...(factionExists(FactionName.ChurchOfTheMachineGod) ? initChurchOfTheMachineGodAugmentations() : []),
   ].map(resetAugmentation);
 }
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { Reviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { CONSTANTS } from "../Constants";
-import { LocationName } from "../Enums";
+import { LocationName } from "../data/Enums";
 import { formatExp } from "../ui/formatNumber";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Money } from "../ui/React/Money";
@@ -10,7 +10,7 @@ import { Player } from "@player";
 import { calculateClassEarnings as calculateClassEarningsRate } from "./Formulas";
 import { Work, WorkType } from "./Work";
 import { applyWorkStats, newWorkStats, sumWorkStats, WorkStats } from "./WorkStats";
-import { GymType, UniversityClassType } from "../Enums";
+import { GymType, UniversityClassType } from "../data/Enums";
 import { checkEnum, findEnumMember } from "../utils/helpers/enum";
 
 export type ClassType = UniversityClassType | GymType;

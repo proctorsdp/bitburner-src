@@ -86,9 +86,9 @@ import { INetscriptExtra } from "./NetscriptFunctions/Extra";
 import { ScriptDeath } from "./Netscript/ScriptDeath";
 import { getBitNodeMultipliers } from "./BitNode/BitNode";
 import { assert, arrayAssert, stringAssert, objectAssert } from "./utils/helpers/typeAssertion";
-import { CityName, JobName, CrimeType, GymType, LocationName, UniversityClassType } from "./Enums";
+import { CityName, JobName, CrimeType, GymType, LocationName, UniversityClassType } from "./data/Enums";
 import { cloneDeep } from "lodash";
-import { FactionWorkType } from "./Enums";
+import { FactionWorkType } from "./data/Enums";
 import numeral from "numeral";
 import { clearPort, peekPort, portHandle, readPort, tryWritePort, writePort } from "./NetscriptPort";
 

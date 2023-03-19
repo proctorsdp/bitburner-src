@@ -10,7 +10,7 @@ import { Sleeve } from "../Sleeve/Sleeve";
 import { PlayerOwnedSourceFile } from "../../SourceFile/PlayerOwnedSourceFile";
 import { Exploit } from "../../Exploits/Exploit";
 
-import { LocationName } from "../../Enums";
+import { LocationName } from "../../data/Enums";
 import { Corporation } from "../../Corporation/Corporation";
 import { Gang } from "../../Gang/Gang";
 import { Bladeburner } from "../../Bladeburner/Bladeburner";

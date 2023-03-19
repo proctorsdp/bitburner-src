@@ -10,7 +10,7 @@ import { formatMoney } from "../../ui/formatNumber";
 import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
 import { BitFlumeEvent } from "../../BitNode/ui/BitFlumeModal";
 import { calculateHackingTime, calculateGrowTime, calculateWeakenTime } from "../../Hacking";
-import { FactionNames } from "../../Faction/data/FactionNames";
+import { FactionName } from "../../Faction/data/Enums";
 
 function requireHackingLevel(lvl: number) {
   return function () {
@@ -317,7 +317,7 @@ export const programsMetadata: IProgramCreationParams[] = [
       }
 
       Terminal.print("We will contact you.");
-      Terminal.print(`-- ${FactionNames.Daedalus} --`);
+      Terminal.print(`-- ${FactionName.Daedalus} --`);
     },
   },
 ];

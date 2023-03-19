@@ -19,7 +19,7 @@ import { Factions } from "../../Faction/Factions";
 import { resetGangs } from "../../Gang/AllGangs";
 import { Cities } from "../../Locations/Cities";
 import { Locations } from "../../Locations/Locations";
-import { CityName, LocationName } from "../../Enums";
+import { CityName, LocationName } from "../../data/Enums";
 import { Sleeve } from "../Sleeve/Sleeve";
 import { isSleeveCompanyWork } from "../Sleeve/Work/SleeveCompanyWork";
 import { calculateSkillProgress as calculateSkillProgressF, ISkillProgress } from "../formulas/skill";
@@ -40,7 +40,7 @@ import { dialogBoxCreate } from "../../ui/React/DialogBox";
 
 import { SnackbarEvents, ToastVariant } from "../../ui/React/Snackbar";
 import { achievements } from "../../Achievements/Achievements";
-import { FactionNames } from "../../Faction/data/FactionNames";
+import { FactionName } from "../../Faction/data/Enums";
 
 import { isCompanyWork } from "../../Work/CompanyWork";
 import { serverMetadata } from "../../Server/data/servers";
@@ -632,7 +632,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //Illuminati
-  const illuminatiFac = Factions[FactionNames.Illuminati];
+  const illuminatiFac = Factions[FactionName.Illuminati];
   if (
     !illuminatiFac.isBanned &&
     !illuminatiFac.isMember &&
@@ -649,7 +649,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //Daedalus
-  const daedalusFac = Factions[FactionNames.Daedalus];
+  const daedalusFac = Factions[FactionName.Daedalus];
   if (
     !daedalusFac.isBanned &&
     !daedalusFac.isMember &&
@@ -666,7 +666,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //The Covenant
-  const covenantFac = Factions[FactionNames.TheCovenant];
+  const covenantFac = Factions[FactionName.TheCovenant];
   if (
     !covenantFac.isBanned &&
     !covenantFac.isMember &&
@@ -683,7 +683,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //ECorp
-  const ecorpFac = Factions[FactionNames.ECorp];
+  const ecorpFac = Factions[FactionName.ECorp];
   if (
     !ecorpFac.isBanned &&
     !ecorpFac.isMember &&
@@ -694,7 +694,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //MegaCorp
-  const megacorpFac = Factions[FactionNames.MegaCorp];
+  const megacorpFac = Factions[FactionName.MegaCorp];
   if (
     !megacorpFac.isBanned &&
     !megacorpFac.isMember &&
@@ -705,7 +705,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //Bachman & Associates
-  const bachmanandassociatesFac = Factions[FactionNames.BachmanAssociates];
+  const bachmanandassociatesFac = Factions[FactionName.BachmanAssociates];
   if (
     !bachmanandassociatesFac.isBanned &&
     !bachmanandassociatesFac.isMember &&
@@ -716,7 +716,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //Blade Industries
-  const bladeindustriesFac = Factions[FactionNames.BladeIndustries];
+  const bladeindustriesFac = Factions[FactionName.BladeIndustries];
   if (
     !bladeindustriesFac.isBanned &&
     !bladeindustriesFac.isMember &&
@@ -727,7 +727,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //NWO
-  const nwoFac = Factions[FactionNames.NWO];
+  const nwoFac = Factions[FactionName.NWO];
   if (
     !nwoFac.isBanned &&
     !nwoFac.isMember &&
@@ -738,7 +738,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //Clarke Incorporated
-  const clarkeincorporatedFac = Factions[FactionNames.ClarkeIncorporated];
+  const clarkeincorporatedFac = Factions[FactionName.ClarkeIncorporated];
   if (
     !clarkeincorporatedFac.isBanned &&
     !clarkeincorporatedFac.isMember &&
@@ -749,7 +749,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //OmniTek Incorporated
-  const omnitekincorporatedFac = Factions[FactionNames.OmniTekIncorporated];
+  const omnitekincorporatedFac = Factions[FactionName.OmniTekIncorporated];
   if (
     !omnitekincorporatedFac.isBanned &&
     !omnitekincorporatedFac.isMember &&
@@ -760,7 +760,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //Four Sigma
-  const foursigmaFac = Factions[FactionNames.FourSigma];
+  const foursigmaFac = Factions[FactionName.FourSigma];
   if (
     !foursigmaFac.isBanned &&
     !foursigmaFac.isMember &&
@@ -771,7 +771,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //KuaiGong International
-  const kuaigonginternationalFac = Factions[FactionNames.KuaiGongInternational];
+  const kuaigonginternationalFac = Factions[FactionName.KuaiGongInternational];
   if (
     !kuaigonginternationalFac.isBanned &&
     !kuaigonginternationalFac.isMember &&
@@ -782,12 +782,12 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //Fulcrum Secret Technologies - If you've unlocked fulcrum secret technologies server and have a high rep with the company
-  const fulcrumsecrettechonologiesFac = Factions[FactionNames.FulcrumSecretTechnologies];
+  const fulcrumsecrettechonologiesFac = Factions[FactionName.FulcrumSecretTechnologies];
   const fulcrumSecretServer = GetServer(SpecialServers.FulcrumSecretTechnologies);
   if (!(fulcrumSecretServer instanceof Server))
-    throw new Error(`${FactionNames.FulcrumSecretTechnologies} should be normal server`);
+    throw new Error(`${FactionName.FulcrumSecretTechnologies} should be normal server`);
   if (fulcrumSecretServer == null) {
-    console.error(`Could not find ${FactionNames.FulcrumSecretTechnologies} Server`);
+    console.error(`Could not find ${FactionName.FulcrumSecretTechnologies} Server`);
   } else if (
     !fulcrumsecrettechonologiesFac.isBanned &&
     !fulcrumsecrettechonologiesFac.isMember &&
@@ -799,11 +799,11 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //BitRunners
-  const bitrunnersFac = Factions[FactionNames.BitRunners];
+  const bitrunnersFac = Factions[FactionName.BitRunners];
   const bitrunnersServer = GetServer(SpecialServers.BitRunnersServer);
-  if (!(bitrunnersServer instanceof Server)) throw new Error(`${FactionNames.BitRunners} should be normal server`);
+  if (!(bitrunnersServer instanceof Server)) throw new Error(`${FactionName.BitRunners} should be normal server`);
   if (bitrunnersServer == null) {
-    console.error(`Could not find ${FactionNames.BitRunners} Server`);
+    console.error(`Could not find ${FactionName.BitRunners} Server`);
   } else if (
     !bitrunnersFac.isBanned &&
     !bitrunnersFac.isMember &&
@@ -815,11 +815,11 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
 
   //The Black Hand
 
-  const theblackhandFac = Factions[FactionNames.TheBlackHand];
+  const theblackhandFac = Factions[FactionName.TheBlackHand];
   const blackhandServer = GetServer(SpecialServers.TheBlackHandServer);
-  if (!(blackhandServer instanceof Server)) throw new Error(`${FactionNames.TheBlackHand} should be normal server`);
+  if (!(blackhandServer instanceof Server)) throw new Error(`${FactionName.TheBlackHand} should be normal server`);
   if (blackhandServer == null) {
-    console.error(`Could not find ${FactionNames.TheBlackHand} Server`);
+    console.error(`Could not find ${FactionName.TheBlackHand} Server`);
   } else if (
     !theblackhandFac.isBanned &&
     !theblackhandFac.isMember &&
@@ -830,11 +830,11 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //NiteSec
-  const nitesecFac = Factions[FactionNames.NiteSec];
+  const nitesecFac = Factions[FactionName.NiteSec];
   const nitesecServer = GetServer(SpecialServers.NiteSecServer);
-  if (!(nitesecServer instanceof Server)) throw new Error(`${FactionNames.NiteSec} should be normal server`);
+  if (!(nitesecServer instanceof Server)) throw new Error(`${FactionName.NiteSec} should be normal server`);
   if (nitesecServer == null) {
-    console.error(`Could not find ${FactionNames.NiteSec} Server`);
+    console.error(`Could not find ${FactionName.NiteSec} Server`);
   } else if (
     !nitesecFac.isBanned &&
     !nitesecFac.isMember &&
@@ -845,7 +845,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //Chongqing
-  const chongqingFac = Factions[FactionNames.Chongqing];
+  const chongqingFac = Factions[FactionName.Chongqing];
   if (
     !chongqingFac.isBanned &&
     !chongqingFac.isMember &&
@@ -857,7 +857,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //Sector-12
-  const sector12Fac = Factions[FactionNames.Sector12];
+  const sector12Fac = Factions[FactionName.Sector12];
   if (
     !sector12Fac.isBanned &&
     !sector12Fac.isMember &&
@@ -869,7 +869,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //New Tokyo
-  const newtokyoFac = Factions[FactionNames.NewTokyo];
+  const newtokyoFac = Factions[FactionName.NewTokyo];
   if (
     !newtokyoFac.isBanned &&
     !newtokyoFac.isMember &&
@@ -881,7 +881,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //Aevum
-  const aevumFac = Factions[FactionNames.Aevum];
+  const aevumFac = Factions[FactionName.Aevum];
   if (
     !aevumFac.isBanned &&
     !aevumFac.isMember &&
@@ -893,7 +893,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //Ishima
-  const ishimaFac = Factions[FactionNames.Ishima];
+  const ishimaFac = Factions[FactionName.Ishima];
   if (
     !ishimaFac.isBanned &&
     !ishimaFac.isMember &&
@@ -905,7 +905,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //Volhaven
-  const volhavenFac = Factions[FactionNames.Volhaven];
+  const volhavenFac = Factions[FactionName.Volhaven];
   if (
     !volhavenFac.isBanned &&
     !volhavenFac.isMember &&
@@ -917,7 +917,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //Speakers for the Dead
-  const speakersforthedeadFac = Factions[FactionNames.SpeakersForTheDead];
+  const speakersforthedeadFac = Factions[FactionName.SpeakersForTheDead];
   if (
     !speakersforthedeadFac.isBanned &&
     !speakersforthedeadFac.isMember &&
@@ -936,7 +936,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //The Dark Army
-  const thedarkarmyFac = Factions[FactionNames.TheDarkArmy];
+  const thedarkarmyFac = Factions[FactionName.TheDarkArmy];
   if (
     !thedarkarmyFac.isBanned &&
     !thedarkarmyFac.isMember &&
@@ -956,7 +956,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //The Syndicate
-  const thesyndicateFac = Factions[FactionNames.TheSyndicate];
+  const thesyndicateFac = Factions[FactionName.TheSyndicate];
   if (
     !thesyndicateFac.isBanned &&
     !thesyndicateFac.isMember &&
@@ -976,7 +976,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //Silhouette
-  const silhouetteFac = Factions[FactionNames.Silhouette];
+  const silhouetteFac = Factions[FactionName.Silhouette];
   if (
     !silhouetteFac.isBanned &&
     !silhouetteFac.isMember &&
@@ -991,7 +991,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //Tetrads
-  const tetradsFac = Factions[FactionNames.Tetrads];
+  const tetradsFac = Factions[FactionName.Tetrads];
   if (
     !tetradsFac.isBanned &&
     !tetradsFac.isMember &&
@@ -1007,7 +1007,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //SlumSnakes
-  const slumsnakesFac = Factions[FactionNames.SlumSnakes];
+  const slumsnakesFac = Factions[FactionName.SlumSnakes];
   if (
     !slumsnakesFac.isBanned &&
     !slumsnakesFac.isMember &&
@@ -1023,7 +1023,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //Netburners
-  const netburnersFac = Factions[FactionNames.Netburners];
+  const netburnersFac = Factions[FactionName.Netburners];
   let totalHacknetRam = 0;
   let totalHacknetCores = 0;
   let totalHacknetLevels = 0;
@@ -1055,7 +1055,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //Tian Di Hui
-  const tiandihuiFac = Factions[FactionNames.TianDiHui];
+  const tiandihuiFac = Factions[FactionName.TianDiHui];
   if (
     !tiandihuiFac.isBanned &&
     !tiandihuiFac.isMember &&
@@ -1068,11 +1068,11 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //CyberSec
-  const cybersecFac = Factions[FactionNames.CyberSec];
+  const cybersecFac = Factions[FactionName.CyberSec];
   const cybersecServer = GetServer(SpecialServers.CyberSecServer);
-  if (!(cybersecServer instanceof Server)) throw new Error(`${FactionNames.CyberSec} should be normal server`);
+  if (!(cybersecServer instanceof Server)) throw new Error(`${FactionName.CyberSec} should be normal server`);
   if (cybersecServer == null) {
-    console.error(`Could not find ${FactionNames.CyberSec} Server`);
+    console.error(`Could not find ${FactionName.CyberSec} Server`);
   } else if (
     !cybersecFac.isBanned &&
     !cybersecFac.isMember &&
@@ -1133,7 +1133,7 @@ export function gainCodingContractReward(
       const totalGain = CONSTANTS.CodingContractBaseFactionRepGain * difficulty;
 
       // Ignore Bladeburners and other special factions for this calculation
-      const specialFactions = [FactionNames.Bladeburners as string];
+      const specialFactions = [FactionName.Bladeburners as string];
       const factions = this.factions.slice().filter((f) => {
         return !specialFactions.includes(f);
       });

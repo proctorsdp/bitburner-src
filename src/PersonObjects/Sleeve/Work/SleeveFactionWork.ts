@@ -2,8 +2,8 @@ import { Player } from "@player";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../../../utils/JSONReviver";
 import { Sleeve } from "../Sleeve";
 import { applySleeveGains, Work, WorkType } from "./Work";
-import { FactionWorkType } from "../../../Enums";
-import { FactionNames } from "../../../Faction/data/FactionNames";
+import { FactionWorkType } from "../../../data/Enums";
+import { FactionName } from "../../../Faction/data/Enums";
 import { Factions } from "../../../Faction/Factions";
 import { calculateFactionExp, calculateFactionRep } from "../../../Work/Formulas";
 import { Faction } from "../../../Faction/Faction";
@@ -26,7 +26,7 @@ export class SleeveFactionWork extends Work {
   constructor(params?: SleeveFactionWorkParams) {
     super();
     this.factionWorkType = params?.factionWorkType ?? FactionWorkType.hacking;
-    this.factionName = params?.factionName ?? FactionNames.Sector12;
+    this.factionName = params?.factionName ?? FactionName.Sector12;
   }
 
   getExpRates(sleeve: Sleeve): WorkStats {

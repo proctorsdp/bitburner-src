@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import { Sleeve } from "../Sleeve";
 import { Player } from "@player";
 import { Crimes } from "../../../Crime/Crimes";
-import { CityName, LocationName } from "../../../Enums";
+import { CityName, LocationName } from "../../../data/Enums";
 import { Factions } from "../../../Faction/Factions";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import { FactionNames } from "../../../Faction/data/FactionNames";
+import { FactionName } from "../../../Faction/data/Enums";
 import { isSleeveFactionWork } from "../Work/SleeveFactionWork";
 import { isSleeveCompanyWork } from "../Work/SleeveCompanyWork";
 import { isSleeveBladeburnerWork } from "../Work/SleeveBladeburnerWork";
-import { CrimeType, FactionWorkType, GymType } from "../../../Enums";
+import { CrimeType, FactionWorkType, GymType } from "../../../data/Enums";
 import { checkEnum } from "../../../utils/helpers/enum";
 import { WorkType } from "../Work/Work";
 
@@ -63,7 +63,7 @@ function possibleJobs(sleeve: Sleeve): string[] {
 
 function possibleFactions(sleeve: Sleeve): string[] {
   // Array of all factions that other sleeves are working for
-  const forbiddenFactions = [FactionNames.Bladeburners as string, FactionNames.ShadowsOfAnarchy as string];
+  const forbiddenFactions = [FactionName.Bladeburners as string, FactionName.ShadowsOfAnarchy as string];
   if (Player.gang) {
     forbiddenFactions.push(Player.gang.facName);
   }

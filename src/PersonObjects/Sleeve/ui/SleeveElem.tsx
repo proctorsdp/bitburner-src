@@ -1,6 +1,6 @@
 import { Box, Button, Paper, Tooltip, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { FactionWorkType } from "../../../Enums";
+import { FactionWorkType } from "../../../data/Enums";
 import { CONSTANTS } from "../../../Constants";
 import { Player } from "@player";
 import { formatPercent } from "../../../ui/formatNumber";
@@ -12,7 +12,7 @@ import { EarningsElement, StatsElement } from "./StatsElement";
 import { TaskSelector } from "./TaskSelector";
 import { TravelModal } from "./TravelModal";
 import { findCrime } from "../../../Crime/CrimeHelpers";
-import { CrimeType } from "../../../Enums";
+import { CrimeType } from "../../../data/Enums";
 import { WorkType } from "../Work/Work";
 
 function getWorkDescription(sleeve: Sleeve, progress: number): string {

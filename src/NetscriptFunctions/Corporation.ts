@@ -53,7 +53,7 @@ import {
 } from "../Corporation/Actions";
 import { CorporationUnlockUpgrades } from "../Corporation/data/CorporationUnlockUpgrades";
 import { CorporationUpgrades } from "../Corporation/data/CorporationUpgrades";
-import { EmployeePositions, IndustryType } from "../Corporation/data/Enums";
+import { EmployeePosition, IndustryType } from "../Corporation/data/Enums";
 import { IndustriesData, IndustryResearchTrees } from "../Corporation/IndustryData";
 import * as corpConstants from "../Corporation/data/Constants";
 import { ResearchMap } from "../Corporation/ResearchMap";
@@ -62,7 +62,7 @@ import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { InternalAPI, NetscriptContext, removedFunction } from "../Netscript/APIWrapper";
 import { assertMember, helpers } from "../Netscript/NetscriptHelpers";
 import { checkEnum } from "../utils/helpers/enum";
-import { CityName } from "../Enums";
+import { CityName } from "../data/Enums";
 import { MaterialInfo } from "../Corporation/MaterialInfo";
 
 export function NetscriptCorporation(): InternalAPI<NSCorporation> {
@@ -612,8 +612,8 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const amount = helpers.number(ctx, "amount", _amount);
       const job = helpers.string(ctx, "job", _job);
 
-      if (!checkEnum(EmployeePositions, job)) throw new Error(`'${job}' is not a valid job.`);
-      if (job === EmployeePositions.Unassigned) return false;
+      if (!checkEnum(EmployeePosition, job)) throw new Error(`'${job}' is not a valid job.`);
+      if (job === EmployeePosition.Unassigned) return false;
       if (amount < 0 || !Number.isInteger(amount))
         throw helpers.makeRuntimeErrorMsg(
           ctx,
@@ -624,7 +624,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
 
       const totalNewEmployees = amount - office.employeeNextJobs[job];
 
-      if (office.employeeNextJobs[EmployeePositions.Unassigned] < totalNewEmployees)
+      if (office.employeeNextJobs[EmployeePosition.Unassigned] < totalNewEmployees)
         throw helpers.makeRuntimeErrorMsg(
           ctx,
           `Unable to bring '${job} employees to ${amount}. Requires ${totalNewEmployees} unassigned employees`,
@@ -635,8 +635,8 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       checkAccess(ctx, 8);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
       const cityName = helpers.city(ctx, "cityName", _cityName);
-      const position = _position ? helpers.string(ctx, "position", _position) : EmployeePositions.Unassigned;
-      if (!checkEnum(EmployeePositions, position)) {
+      const position = _position ? helpers.string(ctx, "position", _position) : EmployeePosition.Unassigned;
+      if (!checkEnum(EmployeePosition, position)) {
         throw helpers.makeRuntimeErrorMsg(ctx, `Invalid position: ${position}`);
       }
       const office = getOffice(divisionName, cityName);

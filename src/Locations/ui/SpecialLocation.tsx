@@ -16,7 +16,7 @@ import Button from "@mui/material/Button";
 
 import { Location } from "../Location";
 import { CreateCorporationModal } from "../../Corporation/ui/modals/CreateCorporationModal";
-import { LocationName } from "../../Enums";
+import { LocationName } from "../../data/Enums";
 import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
 import { Factions } from "../../Faction/Factions";
 import { joinFaction } from "../../Faction/FactionHelpers";
@@ -35,7 +35,7 @@ import { HacknetNode } from "../../Hacknet/HacknetNode";
 import { HacknetServer } from "../../Hacknet/HacknetServer";
 import { GetServer } from "../../Server/AllServers";
 import { ArcadeRoot } from "../../Arcade/ui/ArcadeRoot";
-import { FactionNames } from "../../Faction/data/FactionNames";
+import { FactionName } from "../../Faction/data/Enums";
 import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
 
 type IProps = {
@@ -163,8 +163,8 @@ export function SpecialLocation(props: IProps): React.ReactElement {
   }
 
   function handleCotMG(): void {
-    const faction = Factions[FactionNames.ChurchOfTheMachineGod];
-    if (!Player.factions.includes(FactionNames.ChurchOfTheMachineGod)) {
+    const faction = Factions[FactionName.ChurchOfTheMachineGod];
+    if (!Player.factions.includes(FactionName.ChurchOfTheMachineGod)) {
       joinFaction(faction);
     }
     if (
@@ -243,7 +243,7 @@ export function SpecialLocation(props: IProps): React.ReactElement {
         </>
       );
     }
-    if (Player.factions.includes(FactionNames.ChurchOfTheMachineGod)) {
+    if (Player.factions.includes(FactionName.ChurchOfTheMachineGod)) {
       return (
         <>
           <Typography>

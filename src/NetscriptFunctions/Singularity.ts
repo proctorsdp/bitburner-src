@@ -15,7 +15,7 @@ import { Singularity as ISingularity } from "@nsdefs";
 import { findCrime } from "../Crime/CrimeHelpers";
 import { CompanyPositions } from "../Company/CompanyPositions";
 import { DarkWebItems } from "../DarkWeb/DarkWebItems";
-import { CityName, LocationName } from "../Enums";
+import { CityName, LocationName } from "../data/Enums";
 import { Router } from "../ui/GameRoot";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import { Page } from "../ui/Router";
@@ -37,13 +37,13 @@ import { Server } from "../Server/Server";
 import { netscriptCanHack } from "../Hacking/netscriptCanHack";
 import { FactionInfos } from "../Faction/FactionInfo";
 import { InternalAPI, NetscriptContext, removedFunction } from "../Netscript/APIWrapper";
-import { BlackOperationNames } from "../Bladeburner/data/BlackOperationNames";
+import { BlackOperationName } from "../Bladeburner/data/Enums";
 import { enterBitNode } from "../RedPill";
-import { FactionNames } from "../Faction/data/FactionNames";
+import { FactionName } from "../Faction/data/Enums";
 import { ClassWork } from "../Work/ClassWork";
 import { CreateProgramWork, isCreateProgramWork } from "../Work/CreateProgramWork";
 import { FactionWork } from "../Work/FactionWork";
-import { FactionWorkType, GymType, UniversityClassType } from "../Enums";
+import { FactionWorkType, GymType, UniversityClassType } from "../data/Enums";
 import { CompanyWork } from "../Work/CompanyWork";
 import { canGetBonus, onExport } from "../ExportBonus";
 import { saveObject } from "../SaveObject";
@@ -969,7 +969,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         helpers.log(ctx, () => `You can't donate to '${facName}' because youre managing a gang for it`);
         return false;
       }
-      if (faction.name === FactionNames.ChurchOfTheMachineGod || faction.name === FactionNames.Bladeburners) {
+      if (faction.name === FactionName.ChurchOfTheMachineGod || faction.name === FactionName.Bladeburners) {
         helpers.log(ctx, () => `You can't donate to '${facName}' because they do not accept donations`);
         return false;
       }
@@ -1174,7 +1174,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         };
         const bladeburnerRequirements = () => {
           if (!Player.bladeburner) return false;
-          return Player.bladeburner.blackops[BlackOperationNames.OperationDaedalus];
+          return Player.bladeburner.blackops[BlackOperationName.OperationDaedalus];
         };
 
         if (!hackingRequirements() && !bladeburnerRequirements()) {

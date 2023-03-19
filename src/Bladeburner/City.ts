@@ -2,7 +2,7 @@ import { BladeburnerConstants } from "./data/Constants";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
 import { addOffset } from "../utils/helpers/addOffset";
-import { CityName } from "../Enums";
+import { CityName } from "../data/Enums";
 
 interface IChangePopulationByCountParams {
   /** How much the estimate should change by. */

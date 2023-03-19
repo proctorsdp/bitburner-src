@@ -16,7 +16,7 @@ import {
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { InvitationEvent } from "./ui/InvitationModal";
-import { FactionNames } from "./data/FactionNames";
+import { FactionName } from "./data/Enums";
 import { SFC32RNG } from "../Casino/RNG";
 import { isFactionWork } from "../Work/FactionWork";
 
@@ -32,7 +32,7 @@ export function joinFaction(faction: Faction): void {
   if (faction.isMember) return;
   faction.isMember = true;
   Player.factions.push(faction.name);
-  const allFactions = Object.values(FactionNames).map((faction) => faction as string);
+  const allFactions = Object.values(FactionName).map((faction) => faction as string);
   Player.factions.sort((a, b) => allFactions.indexOf(a) - allFactions.indexOf(b));
   const factionInfo = faction.getInfo();
 

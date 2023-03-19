@@ -26,11 +26,11 @@ import { save } from "./db";
 import { AwardNFG, v1APIBreak } from "./utils/v1APIBreak";
 import { AugmentationNames } from "./Augmentation/data/AugmentationNames";
 import { PlayerOwnedAugmentation } from "./Augmentation/PlayerOwnedAugmentation";
-import { LocationName } from "./Enums";
+import { LocationName } from "./data/Enums";
 import { PlayerObject } from "./PersonObjects/Player/PlayerObject";
 import { pushGameSaved } from "./Electron";
 import { defaultMonacoTheme } from "./ScriptEditor/ui/themes";
-import { FactionNames } from "./Faction/data/FactionNames";
+import { FactionName } from "./Faction/data/Enums";
 import { Faction } from "./Faction/Faction";
 import { safelyCreateUniqueServer } from "./Server/ServerHelpers";
 import { SpecialServers } from "./Server/data/SpecialServers";
@@ -406,7 +406,7 @@ function evaluateVersionCompatibility(ver: string | number): void {
   }
   //Fix contract names
   if (ver < 16) {
-    Factions[FactionNames.ShadowsOfAnarchy] = new Faction(FactionNames.ShadowsOfAnarchy);
+    Factions[FactionName.ShadowsOfAnarchy] = new Faction(FactionName.ShadowsOfAnarchy);
     //Iterate over all contracts on all servers
     for (const server of GetAllServers()) {
       for (const contract of server.contracts) {

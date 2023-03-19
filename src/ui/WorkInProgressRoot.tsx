@@ -5,7 +5,7 @@ import { uniqueId } from "lodash";
 import React from "react";
 import { Companies } from "../Company/Companies";
 import { CONSTANTS } from "../Constants";
-import { LocationName } from "../Enums";
+import { LocationName } from "../data/Enums";
 import { Locations } from "../Locations/Locations";
 import { Settings } from "../Settings/Settings";
 import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
@@ -25,7 +25,7 @@ import { WorkStats } from "../Work/WorkStats";
 import { isCreateProgramWork } from "../Work/CreateProgramWork";
 import { isGraftingWork } from "../Work/GraftingWork";
 import { isFactionWork } from "../Work/FactionWork";
-import { FactionWorkType } from "../Enums";
+import { FactionWorkType } from "../data/Enums";
 import { isCompanyWork } from "../Work/CompanyWork";
 import { useRerender } from "./React/hooks";
 

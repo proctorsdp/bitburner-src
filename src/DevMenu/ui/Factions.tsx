@@ -17,12 +17,12 @@ import IconButton from "@mui/material/IconButton";
 import ReplyAllIcon from "@mui/icons-material/ReplyAll";
 import ReplyIcon from "@mui/icons-material/Reply";
 import InputLabel from "@mui/material/InputLabel";
-import { FactionNames } from "../../Faction/data/FactionNames";
+import { FactionName } from "../../Faction/data/Enums";
 
 const bigNumber = 1e12;
 
 export function Factions(): React.ReactElement {
-  const [faction, setFaction] = useState(FactionNames.Illuminati as string);
+  const [faction, setFaction] = useState(FactionName.Illuminati as string);
 
   function setFactionDropdown(event: SelectChangeEvent<string>): void {
     setFaction(event.target.value);
@@ -33,7 +33,7 @@ export function Factions(): React.ReactElement {
   }
 
   function receiveAllInvites(): void {
-    Object.values(FactionNames).forEach((faction) => Player.receiveInvite(faction));
+    Object.values(FactionName).forEach((faction) => Player.receiveInvite(faction));
   }
 
   function modifyFactionRep(modifier: number): (x: number) => void {

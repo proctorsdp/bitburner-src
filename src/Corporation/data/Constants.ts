@@ -8,7 +8,7 @@ import {
   CorpUpgradeName,
 } from "@nsdefs";
 import { CONSTANTS } from "../../Constants";
-import { IndustryType, EmployeePositions } from "./Enums";
+import { IndustryType, EmployeePosition } from "./Enums";
 
 // For typed strings, we need runtime objects to do API typechecking against.
 
@@ -18,7 +18,7 @@ import { IndustryType, EmployeePositions } from "./Enums";
 export const stateNames: CorpStateName[] = ["START", "PURCHASE", "PRODUCTION", "EXPORT", "SALE"],
   // TODO: remove IndustryType and EmployeePositions enums and just use the typed strings.
   /** Names of all corporation employee positions */
-  employeePositions: CorpEmployeePosition[] = Object.values(EmployeePositions),
+  employeePositions: CorpEmployeePosition[] = Object.values(EmployeePosition),
   /** Names of all industries. */
   industryNames: CorpIndustryName[] = Object.values(IndustryType),
   /** Names of all materials */

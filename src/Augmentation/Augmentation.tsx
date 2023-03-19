@@ -7,7 +7,7 @@ import { formatPercent } from "../ui/formatNumber";
 import { Money } from "../ui/React/Money";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
-import { FactionNames } from "../Faction/data/FactionNames";
+import { FactionName } from "../Faction/data/Enums";
 import { Player } from "@player";
 import { AugmentationNames } from "./data/AugmentationNames";
 import { CONSTANTS } from "../Constants";
@@ -541,7 +541,7 @@ export class Augmentation {
       for (let i = 0; i < Player.queuedAugmentations.length; ++i) {
         moneyCost *= getBaseAugmentationPriceMultiplier();
       }
-    } else if (augmentationReference.factions.includes(FactionNames.ShadowsOfAnarchy)) {
+    } else if (augmentationReference.factions.includes(FactionName.ShadowsOfAnarchy)) {
       const soaAugmentationNames = initSoAAugmentations().map((augmentation) => augmentation.name);
       const soaAugCount = soaAugmentationNames.filter((augmentationName) =>
         Player.hasAugmentation(augmentationName),

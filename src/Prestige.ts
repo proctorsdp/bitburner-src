@@ -1,5 +1,5 @@
-import { FactionNames } from "./Faction/data/FactionNames";
-import { CityName } from "./Enums";
+import { FactionName } from "./Faction/data/Enums";
+import { CityName } from "./data/Enums";
 import { StaticAugmentations } from "./Augmentation/StaticAugmentations";
 import { augmentationExists, initAugmentations } from "./Augmentation/AugmentationHelpers";
 import { AugmentationNames } from "./Augmentation/data/AugmentationNames";
@@ -159,7 +159,7 @@ export function prestigeAugmentation(): void {
     augmentationExists(AugmentationNames.StaneksGift1) &&
     Player.hasAugmentation(AugmentationNames.StaneksGift1, true)
   ) {
-    joinFaction(Factions[FactionNames.ChurchOfTheMachineGod]);
+    joinFaction(Factions[FactionName.ChurchOfTheMachineGod]);
   }
 
   staneksGift.prestigeAugmentation();

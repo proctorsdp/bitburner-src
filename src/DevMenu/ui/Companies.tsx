@@ -11,12 +11,12 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { Companies as AllCompanies } from "../../Company/Companies";
 import MenuItem from "@mui/material/MenuItem";
 import { Adjuster } from "./Adjuster";
-import { FactionNames } from "../../Faction/data/FactionNames";
+import { FactionName } from "../../Faction/data/Enums";
 
 const bigNumber = 1e12;
 
 export function Companies(): React.ReactElement {
-  const [company, setCompany] = useState(FactionNames.ECorp as string);
+  const [company, setCompany] = useState(FactionName.ECorp as string);
   function setCompanyDropdown(event: SelectChangeEvent<string>): void {
     setCompany(event.target.value);
   }

@@ -16,7 +16,7 @@ export enum IndustryType {
   RealEstate = "Real Estate",
 }
 
-export enum EmployeePositions {
+export enum EmployeePosition {
   Operations = "Operations",
   Engineer = "Engineer",
   Business = "Business",
