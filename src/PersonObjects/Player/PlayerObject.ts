@@ -27,8 +27,8 @@ import { CONSTANTS } from "../../Constants";
 import { Work } from "src/Work/Work";
 import { Person } from "../Person";
 import { Player as IPlayer } from "@nsdefs";
-import { FactionName } from "src/Faction/data/Enums";
-import { getEnumHelper } from "src/utils/helpers/enum";
+import { FactionName } from "../../Faction/data/Enums";
+import { getEnumHelper } from "../../utils/helpers/enum";
 
 export class PlayerObject extends Person implements IPlayer {
   // Player-specific properties
