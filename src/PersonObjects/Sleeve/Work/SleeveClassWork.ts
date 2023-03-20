@@ -6,7 +6,7 @@ import { calculateClassEarnings } from "../../../Work/Formulas";
 import { Sleeve } from "../Sleeve";
 import { scaleWorkStats, WorkStats } from "../../../Work/WorkStats";
 import { GymType, UniversityClassType } from "../../../data/Enums";
-import { checkEnum } from "../../../utils/helpers/enum";
+import { getEnumHelper } from "../../../utils/helpers/enum";
 import { Locations } from "../../../Locations/Locations";
 
 export const isSleeveClassWork = (w: Work | null): w is SleeveClassWork => w !== null && w.type === WorkType.CLASS;
@@ -32,7 +32,7 @@ export class SleeveClassWork extends Work {
   }
 
   isGym(): boolean {
-    return checkEnum(GymType, this.classType);
+    return getEnumHelper(GymType).isMember(this.classType);
   }
 
   process(sleeve: Sleeve, cycles: number) {

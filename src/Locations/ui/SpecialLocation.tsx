@@ -26,7 +26,8 @@ import { Page } from "../../ui/Router";
 import { Player } from "@player";
 
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
-import { SnackbarEvents, ToastVariant } from "../../ui/React/Snackbar";
+import { SnackbarEvents } from "../../ui/React/Snackbar";
+import { ToastVariant } from "../../data/Enums";
 import { N00dles } from "../../utils/helpers/N00dles";
 import { Exploit } from "../../Exploits/Exploit";
 import { applyAugmentation } from "../../Augmentation/AugmentationHelpers";

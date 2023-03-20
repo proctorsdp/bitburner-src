@@ -1,4 +1,4 @@
-import { MessageFilenames } from "./MessageHelpers";
+import { MessageFilenames } from "../data/HiddenEnums";
 
 export class Message {
   // Name of Message file

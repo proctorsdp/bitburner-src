@@ -19,7 +19,7 @@ import { serverMetadata } from "../Server/data/servers";
 import { LocationName } from "../data/Enums";
 import { Company } from "../Company/Company";
 import { CompanyPosition } from "../Company/CompanyPosition";
-import { checkEnum } from "../utils/helpers/enum";
+import { getEnumHelper } from "../utils/helpers/enum";
 
 const gameCPS = 1000 / CONSTANTS.MilliPerCycle; // 5 cycles per second
 export const FactionWorkStats: Record<FactionWorkType, WorkStats> = {
@@ -96,7 +96,7 @@ export function calculateClassEarnings(person: IPerson, type: ClassType, locatio
   const classs = Classes[type];
   const location = Locations[locationName];
 
-  const hashMult = checkEnum(GymType, type) ? hashManager.getTrainingMult() : hashManager.getStudyMult();
+  const hashMult = getEnumHelper(GymType).isMember(type) ? hashManager.getTrainingMult() : hashManager.getStudyMult();
 
   const earnings = multWorkStats(
     scaleWorkStats(classs.earnings, (location.expMult / gameCPS) * hashMult, false),

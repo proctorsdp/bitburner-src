@@ -9,7 +9,8 @@ import { Router } from "../../ui/GameRoot";
 import { Terminal } from "../../Terminal";
 import libarg from "arg";
 import { showLiterature } from "../../Literature/LiteratureHelpers";
-import { MessageFilenames, showMessage } from "../../Message/MessageHelpers";
+import { showMessage } from "../../Message/MessageHelpers";
+import { MessageFilenames } from "../../data/HiddenEnums";
 
 export function ls(args: (string | number | boolean)[], server: BaseServer): void {
   interface LSFlags {

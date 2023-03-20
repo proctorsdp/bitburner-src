@@ -38,12 +38,14 @@ export function joinFaction(faction: Faction): void {
 
   //Determine what factions you are banned from now that you have joined this faction
   for (const enemy of factionInfo.enemies) {
-    if (Factions[enemy]) Factions[enemy].isBanned = true;
+    const enemyFaction = Factions[enemy];
+    if (enemyFaction) enemyFaction.isBanned = true;
   }
-  for (let i = 0; i < Player.factionInvitations.length; ++i) {
-    if (Player.factionInvitations[i] == faction.name || Factions[Player.factionInvitations[i]].isBanned) {
+
+  for (let i = Player.factionInvitations.length - 1; i >= 0; i--) {
+    const otherFaction = Factions[Player.factionInvitations[i]];
+    if (!otherFaction || Player.factionInvitations[i] === faction.name || otherFaction.isBanned) {
       Player.factionInvitations.splice(i, 1);
-      i--;
     }
   }
 }
@@ -108,16 +110,15 @@ export function purchaseAugmentation(aug: Augmentation, fac: Faction, sing = fal
 
 export function processPassiveFactionRepGain(numCycles: number): void {
   if (Player.bitNodeN === 2) return;
-  for (const name of Object.keys(Factions)) {
-    if (isFactionWork(Player.currentWork) && name === Player.currentWork.factionName) continue;
-    if (!Factions.hasOwnProperty(name)) continue;
-    const faction = Factions[name];
+  const currentWorkingFaction = isFactionWork(Player.currentWork) ? Player.currentWork.factionName : "";
+  for (const faction of Object.values(Factions)) {
+    if (faction.name === currentWorkingFaction) continue;
     if (!faction.isMember) continue;
     // No passive rep for special factions
     const info = faction.getInfo();
     if (!info.offersWork()) continue;
     // No passive rep for gangs.
-    if (Player.getGangName() === name) continue;
+    if (Player.getGangName() === faction.name) continue;
     // 0 favor = 1%/s
     // 50 favor = 6%/s
     // 100 favor = 11%/s

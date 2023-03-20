@@ -1,15 +1,13 @@
 import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
-import { MessageFilenames, showMessage } from "../../Message/MessageHelpers";
+import { showMessage } from "../../Message/MessageHelpers";
 import { showLiterature } from "../../Literature/LiteratureHelpers";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
-import { checkEnum } from "../../utils/helpers/enum";
+import { getEnumHelper } from "../../utils/helpers/enum";
+import { MessageFilenames } from "../../data/HiddenEnums";
 
 export function cat(args: (string | number | boolean)[], server: BaseServer): void {
-  if (args.length !== 1) {
-    Terminal.error("Incorrect usage of cat command. Usage: cat [file]");
-    return;
-  }
+  if (args.length !== 1) return Terminal.error("Incorrect usage of cat command. Usage: cat [file]");
   const relative_filename = args[0] + "";
   const filename = Terminal.getFilepath(relative_filename);
   if (
@@ -19,39 +17,22 @@ export function cat(args: (string | number | boolean)[], server: BaseServer): vo
     !filename.endsWith(".script") &&
     !filename.endsWith(".js")
   ) {
-    Terminal.error(
+    return Terminal.error(
       "Only .msg, .txt, .lit, .script and .js files are viewable with cat (filename must end with .msg, .txt, .lit, .script or .js)",
     );
-    return;
   }
 
   if (filename.endsWith(".msg") || filename.endsWith(".lit")) {
-    for (let i = 0; i < server.messages.length; ++i) {
-      if (filename.endsWith(".lit") && server.messages[i] === filename) {
-        const file = server.messages[i];
-        if (file.endsWith(".msg")) throw new Error(".lit file should not be a .msg");
-        showLiterature(file);
-        return;
-      } else if (filename.endsWith(".msg")) {
-        const file = server.messages[i];
-        if (file !== filename) continue;
-        if (!checkEnum(MessageFilenames, file)) return;
-        showMessage(file);
-        return;
-      }
-    }
+    if (!server.messages.includes(filename)) return Terminal.error(`No such file ${filename}`);
+    if (getEnumHelper(MessageFilenames).isMember(filename)) return showMessage(filename);
+    if (filename.endsWith(".lit")) return showLiterature(filename);
+    return Terminal.error(".msg file exists but is not detected as a valid message. This is a bug.");
   } else if (filename.endsWith(".txt")) {
     const txt = Terminal.getTextFile(relative_filename);
-    if (txt != null) {
-      txt.show();
-      return;
-    }
+    if (txt) return txt.show();
   } else if (filename.endsWith(".script") || filename.endsWith(".js")) {
     const script = Terminal.getScript(relative_filename);
-    if (script != null) {
-      dialogBoxCreate(`${script.filename}\n\n${script.code}`);
-      return;
-    }
+    if (script) return dialogBoxCreate(`${script.filename}\n\n${script.code}`);
   }
 
   Terminal.error(`No such file ${filename}`);

@@ -7,6 +7,9 @@ export type PositiveInteger = Integer & PositiveNumber;
 export const isInteger = (n: unknown): n is Integer => Number.isInteger(n);
 export const isPositiveInteger = (n: unknown): n is PositiveInteger => isInteger(n) && n > 0;
 
+// General utility types
+export type Member<T> = T extends (infer arrayMember)[] ? arrayMember : T[keyof T];
+
 /** Status object for functions that return a boolean indicating success/failure
  * and an optional message */
 export interface IReturnStatus {

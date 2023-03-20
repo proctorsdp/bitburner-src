@@ -10,15 +10,15 @@ import { Player } from "@player";
 import { Router } from "../../ui/GameRoot";
 import { MenuItem, SelectChangeEvent, TextField, Select } from "@mui/material";
 import { Bladeburner } from "../../Bladeburner/Bladeburner";
-import { GangConstants } from "../../Gang/data/Constants";
 import { FactionName } from "../../Faction/data/Enums";
 import { checkForMessagesToSend } from "../../Message/MessageHelpers";
 import { ThemeEvents } from "../../Themes/ui/Theme";
+import { GangFaction, gangFactions } from "../../Gang/data/Enums";
 
 export function General(): React.ReactElement {
   const [error, setError] = useState(false);
   const [corporationName, setCorporationName] = useState("");
-  const [gangFaction, setGangFaction] = useState("Slum Snakes");
+  const [gangFaction, setGangFaction] = useState(gangFactions[0]);
   const [devMoney, setDevMoney] = useState(0);
 
   // Money functions
@@ -71,7 +71,7 @@ export function General(): React.ReactElement {
     // Rerender so the gang menu option will be removed immediately on the devmenu page selection
     ThemeEvents.emit();
   };
-  const setGangFactionDropdown = (event: SelectChangeEvent<string>) => setGangFaction(event.target.value);
+  const setGangFactionDropdown = (event: SelectChangeEvent) => setGangFaction(event.target.value as GangFaction);
 
   // Misc functions
   const checkMessages = () => checkForMessagesToSend();
@@ -140,7 +140,7 @@ export function General(): React.ReactElement {
           <>
             <Typography>Gang Faction:</Typography>
             <Select value={gangFaction} onChange={setGangFactionDropdown}>
-              {GangConstants.Names.map((factionName) => (
+              {gangFactions.map((factionName) => (
                 <MenuItem key={factionName} value={factionName}>
                   {factionName}
                 </MenuItem>

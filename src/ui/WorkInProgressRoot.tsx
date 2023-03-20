@@ -258,12 +258,7 @@ export function WorkInProgressRoot(): React.ReactElement {
       Player.stopFocusing();
     }
 
-    let stopText = "";
-    if (classWork.isGym()) {
-      stopText = "Stop training at gym";
-    } else {
-      stopText = "Stop taking course";
-    }
+    const stopText = `Stop ${classWork.isGym() ? "training at gym" : "taking course"}`;
 
     const rates = classWork.calculateRates();
     workInfo = {
@@ -422,29 +417,32 @@ export function WorkInProgressRoot(): React.ReactElement {
   }
 
   if (isCompanyWork(Player.currentWork)) {
-    const comp = Companies[Player.currentWork.companyName];
-    if (comp) {
-      workInfo = {
-        buttons: {
-          cancel: () => Router.toPage(Page.Terminal),
-        },
-        title:
-          `You cannot work for ${Player.currentWork.companyName || "(Company not found)"} at this time,` +
-          " please try again if you think this should have worked",
-
-        stopText: "Back to Terminal",
-      };
+    const companyName = Player.currentWork.companyName;
+    const company = Companies[companyName];
+    if (!company) {
+      Player.finishWork(true);
+      return <></>;
     }
+    workInfo = {
+      buttons: {
+        cancel: () => Router.toPage(Page.Terminal),
+      },
+      title:
+        `You cannot work for ${Player.currentWork.companyName || "(Company not found)"} at this time,` +
+        " please try again if you think this should have worked",
 
-    const companyRep = comp.playerReputation;
+      stopText: "Back to Terminal",
+    };
+
+    const companyRep = company.playerReputation;
 
     function cancel(): void {
       Player.finishWork(true);
-      Router.toJob(Locations[comp.name]);
+      Router.toJob(Locations[companyName]);
     }
     function unfocus(): void {
       Player.stopFocusing();
-      Router.toJob(Locations[comp.name]);
+      Router.toJob(Locations[companyName]);
     }
 
     const position = Player.jobs[Player.currentWork.companyName];

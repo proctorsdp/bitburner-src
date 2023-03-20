@@ -8,11 +8,11 @@ import { Factions } from "../../../Faction/Factions";
 import { calculateFactionExp, calculateFactionRep } from "../../../Work/Formulas";
 import { Faction } from "../../../Faction/Faction";
 import { scaleWorkStats, WorkStats } from "../../../Work/WorkStats";
-import { findEnumMember } from "../../../utils/helpers/enum";
+import { getEnumHelper } from "../../../utils/helpers/enum";
 
 interface SleeveFactionWorkParams {
   factionWorkType: FactionWorkType;
-  factionName: string;
+  factionName: FactionName;
 }
 
 export const isSleeveFactionWork = (w: Work | null): w is SleeveFactionWork =>
@@ -21,7 +21,7 @@ export const isSleeveFactionWork = (w: Work | null): w is SleeveFactionWork =>
 export class SleeveFactionWork extends Work {
   type: WorkType.FACTION = WorkType.FACTION;
   factionWorkType: FactionWorkType;
-  factionName: string;
+  factionName: FactionName;
 
   constructor(params?: SleeveFactionWorkParams) {
     super();
@@ -68,8 +68,7 @@ export class SleeveFactionWork extends Work {
   /** Initializes a FactionWork object from a JSON save state. */
   static fromJSON(value: IReviverValue): SleeveFactionWork {
     const factionWork = Generic_fromJSON(SleeveFactionWork, value.data);
-    factionWork.factionWorkType =
-      findEnumMember(FactionWorkType, factionWork.factionWorkType) ?? FactionWorkType.hacking;
+    factionWork.factionWorkType = getEnumHelper(FactionWorkType).fuzzyMatch(factionWork.factionWorkType);
     return factionWork;
   }
 }

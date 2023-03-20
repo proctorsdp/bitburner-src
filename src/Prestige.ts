@@ -36,8 +36,8 @@ const BitNode8StartingMoney = 250e6;
 export function prestigeAugmentation(): void {
   initBitNodeMultipliers();
 
-  const maintainMembership = Player.factions.concat(Player.factionInvitations).filter(function (faction) {
-    return Factions[faction].getInfo().keep;
+  const maintainMembership = Player.factions.concat(Player.factionInvitations).filter((factionName) => {
+    return Factions[factionName].getInfo().keep;
   });
   Player.prestigeAugmentation();
 
@@ -73,18 +73,10 @@ export function prestigeAugmentation(): void {
   initForeignServers(Player.getHomeComputer());
 
   // Gain favor for Companies
-  for (const member of Object.keys(Companies)) {
-    if (Companies.hasOwnProperty(member)) {
-      Companies[member].gainFavor();
-    }
-  }
+  for (const company of Object.values(Companies)) company.gainFavor();
 
   // Gain favor for factions
-  for (const member of Object.keys(Factions)) {
-    if (Factions.hasOwnProperty(member)) {
-      Factions[member].gainFavor();
-    }
-  }
+  for (const faction of Object.values(Factions)) faction.gainFavor();
 
   // Stop a Terminal action if there is one.
   if (Terminal.action !== null) {
@@ -205,18 +197,10 @@ export function prestigeSourceFile(flume: boolean): void {
   homeComp.cpuCores = 1;
 
   // Reset favor for Companies
-  for (const member of Object.keys(Companies)) {
-    if (Companies.hasOwnProperty(member)) {
-      Companies[member].favor = 0;
-    }
-  }
+  for (const company of Object.values(Companies)) company.favor = 0;
 
   // Reset favor for factions
-  for (const member of Object.keys(Factions)) {
-    if (Factions.hasOwnProperty(member)) {
-      Factions[member].favor = 0;
-    }
-  }
+  for (const faction of Object.values(Factions)) faction.favor = 0;
 
   // Stop a Terminal action if there is one
   if (Terminal.action !== null) {

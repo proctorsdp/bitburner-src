@@ -2,6 +2,8 @@ import { codingContractTypesMetadata, DescriptionFunc, GeneratorFunc, SolverFunc
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "./utils/JSONReviver";
 import { CodingContractEvent } from "./ui/React/CodingContractModal";
+import { LocationName } from "./data/Enums";
+import { FactionName } from "./Faction/data/Enums";
 
 /* tslint:disable:no-magic-numbers completed-docs max-classes-per-file no-console */
 
@@ -74,11 +76,10 @@ export enum CodingContractResult {
 }
 
 /** A class that represents the type of reward a contract gives */
-export interface ICodingContractReward {
-  /* Name of Company/Faction name for reward, if applicable */
-  name?: string;
-  type: CodingContractRewardType;
-}
+export type CodingContractReward =
+  | { name: ""; type: CodingContractRewardType.FactionReputationAll | CodingContractRewardType.Money }
+  | { name: FactionName; type: CodingContractRewardType.FactionReputation }
+  | { name: LocationName; type: CodingContractRewardType.CompanyReputation };
 
 /**
  * A Coding Contract is a file that poses a programming-related problem to the Player.
@@ -93,7 +94,7 @@ export class CodingContract {
 
   /* Describes the reward given if this Contract is solved. The reward is actually
        processed outside of this file */
-  reward: ICodingContractReward | null;
+  reward: CodingContractReward | null;
 
   /* Number of times the Contract has been attempted */
   tries = 0;
@@ -101,7 +102,7 @@ export class CodingContract {
   /* String representing the contract's type. Must match type in ContractTypes */
   type: string;
 
-  constructor(fn = "", type = "Find Largest Prime Factor", reward: ICodingContractReward | null = null) {
+  constructor(fn = "", type = "Find Largest Prime Factor", reward: CodingContractReward | null = null) {
     this.fn = fn;
     if (!this.fn.endsWith(".cct")) {
       this.fn += ".cct";

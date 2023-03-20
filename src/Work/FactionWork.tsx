@@ -12,19 +12,19 @@ import { CONSTANTS } from "../Constants";
 import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
 import { calculateFactionExp, calculateFactionRep } from "./Formulas";
 import { FactionWorkType } from "../data/Enums";
-import { findEnumMember } from "../utils/helpers/enum";
+import { getEnumHelper } from "../utils/helpers/enum";
 
 interface FactionWorkParams {
   singularity: boolean;
   factionWorkType: FactionWorkType;
-  faction: string;
+  faction: FactionName;
 }
 
 export const isFactionWork = (w: Work | null): w is FactionWork => w !== null && w.type === WorkType.FACTION;
 
 export class FactionWork extends Work {
   factionWorkType: FactionWorkType;
-  factionName: string;
+  factionName: FactionName;
 
   constructor(params?: FactionWorkParams) {
     super(WorkType.FACTION, params?.singularity ?? true);
@@ -94,8 +94,8 @@ export class FactionWork extends Work {
   /** Initializes a FactionWork object from a JSON save state. */
   static fromJSON(value: IReviverValue): FactionWork {
     const factionWork = Generic_fromJSON(FactionWork, value.data);
-    factionWork.factionWorkType =
-      findEnumMember(FactionWorkType, factionWork.factionWorkType) ?? FactionWorkType.hacking;
+    factionWork.factionWorkType = getEnumHelper(FactionWorkType).fuzzyMatch(factionWork.factionWorkType);
+    factionWork.factionName = getEnumHelper(FactionName).fuzzyMatch(factionWork.factionName);
     return factionWork;
   }
 }

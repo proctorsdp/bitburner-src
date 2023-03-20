@@ -23,7 +23,7 @@ interface IProps {
 }
 
 export function Victory(props: IProps): React.ReactElement {
-  const [faction, setFaction] = useState("none");
+  const [faction, setFaction] = useState<FactionName | "none">("none");
 
   function quitInfiltration(): void {
     handleInfiltrators();
@@ -49,7 +49,7 @@ export function Victory(props: IProps): React.ReactElement {
   }
 
   function changeDropdown(event: SelectChangeEvent<string>): void {
-    setFaction(event.target.value);
+    setFaction(event.target.value as FactionName | "none");
   }
 
   function handleInfiltrators(): void {

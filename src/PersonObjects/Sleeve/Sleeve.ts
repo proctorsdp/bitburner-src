@@ -13,9 +13,6 @@ import { Person } from "../Person";
 import { Augmentation } from "../../Augmentation/Augmentation";
 
 import { Companies } from "../../Company/Companies";
-import { Company } from "../../Company/Company";
-import { CompanyPosition } from "../../Company/CompanyPosition";
-import { CompanyPositions } from "../../Company/CompanyPositions";
 import { Contracts } from "../../Bladeburner/data/Contracts";
 import { CONSTANTS } from "../../Constants";
 import { CityName, CrimeType, GymType, LocationName, UniversityClassType } from "../../data/Enums";
@@ -39,6 +36,7 @@ import { SleeveCrimeWork } from "./Work/SleeveCrimeWork";
 import * as sleeveMethods from "./SleeveMethods";
 import { SleevePerson } from "@nsdefs";
 import { calculateIntelligenceBonus } from "../formulas/intelligence";
+import { FactionName } from "src/Faction/data/Enums";
 
 export class Sleeve extends Person implements SleevePerson {
   currentWork: SleeveWork | null = null;
@@ -276,18 +274,9 @@ export class Sleeve extends Person implements SleevePerson {
    * Start work for one of the player's companies
    * Returns boolean indicating success
    */
-  workForCompany(companyName: string): boolean {
-    if (!Companies[companyName] || Player.jobs[companyName] == null) {
-      return false;
-    }
-
-    const company: Company | null = Companies[companyName];
-    const companyPosition: CompanyPosition | null = CompanyPositions[Player.jobs[companyName]];
-    if (company == null) return false;
-    if (companyPosition == null) return false;
-
+  workForCompany(companyName: LocationName): boolean {
+    if (!Companies[companyName] || !Player.jobs[companyName]) return false;
     this.startWork(new SleeveCompanyWork(companyName));
-
     return true;
   }
 
@@ -295,11 +284,9 @@ export class Sleeve extends Person implements SleevePerson {
    * Start work for one of the player's factions
    * Returns boolean indicating success
    */
-  workForFaction(factionName: string, workType: string): boolean {
+  workForFaction(factionName: FactionName, workType: string): boolean {
     const faction = Factions[factionName];
-    if (factionName === "" || !faction || !Player.factions.includes(factionName)) {
-      return false;
-    }
+    if (!Player.factions.includes(factionName)) return false;
 
     const factionInfo = faction.getInfo();
 

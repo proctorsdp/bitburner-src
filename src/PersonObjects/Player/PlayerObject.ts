@@ -27,6 +27,8 @@ import { CONSTANTS } from "../../Constants";
 import { Work } from "src/Work/Work";
 import { Person } from "../Person";
 import { Player as IPlayer } from "@nsdefs";
+import { FactionName } from "src/Faction/data/Enums";
+import { getEnumHelper } from "src/utils/helpers/enum";
 
 export class PlayerObject extends Person implements IPlayer {
   // Player-specific properties
@@ -35,15 +37,15 @@ export class PlayerObject extends Person implements IPlayer {
   gang: Gang | null = null;
   bladeburner: Bladeburner | null = null;
   currentServer = "";
-  factions: string[] = [];
-  factionInvitations: string[] = [];
+  factions: FactionName[] = [];
+  factionInvitations: FactionName[] = [];
   hacknetNodes: (HacknetNode | string)[] = []; // HacknetNode object or hostname of Hacknet Server
   has4SData = false;
   has4SDataTixApi = false;
   hashManager = new HashManager();
   hasTixApiAccess = false;
   hasWseAccount = false;
-  jobs: Record<string, string> = {};
+  jobs: Partial<Record<LocationName, string>> = {};
   karma = 0;
   numPeopleKilled = 0;
   location = LocationName.TravelAgency;
@@ -168,6 +170,10 @@ export class PlayerObject extends Person implements IPlayer {
     if (!value.data.hp?.current || !value.data.hp?.max) value.data.hp = { current: 10, max: 10 };
     const player = Generic_fromJSON(PlayerObject, value.data);
     if (player.money === null) player.money = 0;
+    player.location = getEnumHelper(LocationName).fuzzyMatch(player.location);
+    const factionFilter = (name: string) => getEnumHelper(FactionName).isMember(name);
+    player.factions = Array.isArray(player.factions) ? player.factions.filter(factionFilter) : [];
+    player.factionInvitations = Array.isArray(player.factions) ? player.factionInvitations.filter(factionFilter) : [];
     return player;
   }
 }
