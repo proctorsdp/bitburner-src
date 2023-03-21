@@ -20,46 +20,43 @@ const allEnums = {
 
 class EnumHelper<EnumObj extends object, EnumMember extends Member<EnumObj> & string> {
   name: string; // Name, for including in error text
-  reverseLookup: Record<EnumMember, 1>; // For quick isMember typecheck
-  fuzzyLookup: Partial<Record<string, EnumMember>>;
-  array: Array<EnumMember>;
+  valueArray: Array<EnumMember>;
+  valueSet: Set<EnumMember>; // For quick isMember typecheck
+  fuzzMap: Map<string, EnumMember>; // For fuzzy lookup
   constructor(obj: EnumObj, name: string) {
     this.name = name;
-    this.reverseLookup = {} as Record<EnumMember, 1>;
-    this.fuzzyLookup = {};
-    this.array = Object.values(obj);
-    for (const val of this.array) {
-      this.reverseLookup[val] = 1;
-      this.fuzzyLookup[val.toLowerCase().replace(/[ -]+/g, "")] = val;
-    }
+    this.valueArray = Object.values(obj);
+    this.valueSet = new Set(this.valueArray);
+    this.fuzzMap = new Map(this.valueArray.map((val) => [val.toLowerCase().replace(/[ -]+/g, ""), val]));
   }
-  // Check if a provided string is a valid enum member
-  isMember(toValidate: string): toValidate is EnumMember {
-    return toValidate in this.reverseLookup;
+  // Check if a provided input is a valid enum member
+  isMember(toValidate: unknown): toValidate is EnumMember {
+    // Asserting that Set.has actually takes in arbitrary values, which it does.
+    return (this.valueSet.has as (value: unknown) => boolean)(toValidate);
   }
   nsGetMember(ctx: NetscriptContext, argName: string, toValidate: unknown): EnumMember {
+    if (this.isMember(toValidate)) return toValidate;
     assertString(ctx, argName, toValidate);
-    if (toValidate in this.reverseLookup) return toValidate as EnumMember;
     throw helpers.makeRuntimeErrorMsg(
       ctx,
       `Argument ${argName} should be a ${
         this.name
-      } enum member.\nProvided value: "${toValidate}".\nAllowable values: ${this.array
+      } enum member.\nProvided value: "${toValidate}".\nAllowable values: ${this.valueArray
         .map((val) => `"${val}"`)
         .join(", ")}`,
     );
   }
-  match(input: string): EnumMember | undefined {
-    return input in this.reverseLookup ? (input as EnumMember) : undefined;
+  match(input: unknown): EnumMember | undefined {
+    return this.isMember(input) ? input : undefined;
   }
   // For safe-loading a potential API break name change, always provides a valid enum member.
   fuzzyMatch(input: string): EnumMember {
-    return this.fuzzyLookup[input.toLowerCase().replace(/[ -]+/g, "")] ?? this.array[0];
+    return this.fuzzMap.get(input.toLowerCase().replace(/[ -]+/g, "")) ?? this.valueArray[0];
   }
   // Get a random enum member
   random() {
-    const index = getRandomInt(0, this.array.length - 1);
-    return this.array[index];
+    const index = getRandomInt(0, this.valueArray.length - 1);
+    return this.valueArray[index];
   }
 }
 
@@ -74,6 +71,3 @@ export const getEnumHelper: <EnumObj extends object, EnumMember extends Member<E
   // This type for obj ensures a compiletime error if we try getting a helper for an enum that's not part of allEnums.
   obj: EnumObj & Member<typeof allEnums>,
 ) => EnumHelper<EnumObj, EnumMember> = enumHelpers.get.bind(enumHelpers);
-
-// Not sure if this is useful, or if allEnums would get garbage collected at this point anyway
-for (const key in allEnums) delete allEnums[key as keyof typeof allEnums];
