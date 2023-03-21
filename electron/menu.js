@@ -4,7 +4,6 @@ const log = require("electron-log");
 const Config = require("electron-config");
 const api = require("./api-server");
 const utils = require("./utils");
-const storage = require("./storage");
 const config = new Config();
 
 function getMenu(window) {
@@ -62,54 +61,15 @@ function getMenu(window) {
         },
         {
           label: "Load Last Save",
-          click: async () => {
-            try {
-              const saveGame = await storage.loadLastFromDisk(window);
-              window.webContents.send("push-save-request", { save: saveGame });
-            } catch (error) {
-              log.error(error);
-              utils.writeToast(window, "Could not load last save from disk", "error", 5000);
-            }
-          },
+          click: async () => {},
         },
         {
           label: "Load From File",
-          click: async () => {
-            const defaultPath = await storage.getSaveFolder(window);
-            const result = await dialog.showOpenDialog(window, {
-              title: "Load From File",
-              defaultPath: defaultPath,
-              buttonLabel: "Load",
-              filters: [
-                { name: "Game Saves", extensions: ["json", "json.gz", "txt"] },
-                { name: "All", extensions: ["*"] },
-              ],
-              properties: ["openFile", "dontAddToRecent"],
-            });
-            if (result.canceled) return;
-            const file = result.filePaths[0];
-
-            try {
-              const saveGame = await storage.loadFileFromDisk(file);
-              window.webContents.send("push-save-request", { save: saveGame });
-            } catch (error) {
-              log.error(error);
-              utils.writeToast(window, "Could not load save from disk", "error", 5000);
-            }
-          },
+          click: async () => {},
         },
         {
           label: "Load From Steam Cloud",
-          enabled: storage.isCloudEnabled(),
-          click: async () => {
-            try {
-              const saveGame = await storage.getSteamCloudSaveString();
-              await storage.pushSaveGameForImport(window, saveGame, false);
-            } catch (error) {
-              log.error(error);
-              utils.writeToast(window, "Could not load from Steam Cloud", "error", 5000);
-            }
-          },
+          click: async () => {},
         },
         {
           type: "separator",
@@ -117,53 +77,24 @@ function getMenu(window) {
         {
           label: "Compress Disk Saves (.gz)",
           type: "checkbox",
-          checked: storage.isSaveCompressionEnabled(),
-          click: (menuItem) => {
-            storage.setSaveCompressionConfig(menuItem.checked);
-            utils.writeToast(window, `${menuItem.checked ? "Enabled" : "Disabled"} Save Compression`, "info", 5000);
-            refreshMenu(window);
-          },
+          click: (menuItem) => {},
         },
         {
           label: "Auto-Save to Disk",
           type: "checkbox",
-          checked: storage.isAutosaveEnabled(),
-          click: (menuItem) => {
-            storage.setAutosaveConfig(menuItem.checked);
-            utils.writeToast(window, `${menuItem.checked ? "Enabled" : "Disabled"} Auto-Save to Disk`, "info", 5000);
-            refreshMenu(window);
-          },
+          click: (menuItem) => {},
         },
         {
           label: "Auto-Save to Steam Cloud",
           type: "checkbox",
           enabled: !global.greenworksError,
-          checked: storage.isCloudEnabled(),
-          click: (menuItem) => {
-            storage.setCloudEnabledConfig(menuItem.checked);
-            utils.writeToast(
-              window,
-              `${menuItem.checked ? "Enabled" : "Disabled"} Auto-Save to Steam Cloud`,
-              "info",
-              5000,
-            );
-            refreshMenu(window);
-          },
+          click: (menuItem) => {},
         },
         {
           label: "Restore Newest on Load",
           type: "checkbox",
           checked: config.get("onload-restore-newest", true),
-          click: (menuItem) => {
-            config.set("onload-restore-newest", menuItem.checked);
-            utils.writeToast(
-              window,
-              `${menuItem.checked ? "Enabled" : "Disabled"} Restore Newest on Load`,
-              "info",
-              5000,
-            );
-            refreshMenu(window);
-          },
+          click: (menuItem) => {},
         },
         {
           type: "separator",
@@ -177,10 +108,7 @@ function getMenu(window) {
             },
             {
               label: "Open Saves Directory",
-              click: async () => {
-                const path = await storage.getSaveFolder(window);
-                shell.openPath(path);
-              },
+              click: async () => {},
             },
             {
               label: "Open Logs Directory",
@@ -374,13 +302,7 @@ function getMenu(window) {
         {
           label: "Delete Steam Cloud Data",
           enabled: !global.greenworksError,
-          click: async () => {
-            try {
-              await storage.deleteCloudFile();
-            } catch (error) {
-              log.error(error);
-            }
-          },
+          click: async () => {},
         },
       ],
     },

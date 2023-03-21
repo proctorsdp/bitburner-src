@@ -7,8 +7,6 @@ const api = require("./api-server");
 const gameWindow = require("./gameWindow");
 const achievements = require("./achievements");
 const utils = require("./utils");
-const storage = require("./storage");
-const debounce = require("lodash/debounce");
 const Config = require("electron-config");
 const config = new Config();
 const path = require("path");
@@ -40,8 +38,6 @@ try {
   global.greenworksError = ex.message;
 }
 
-let isRestoreDisabled = false;
-
 // This was moved so that startup errors do not lead to ghost processes
 app.on("window-all-closed", () => {
   log.info("Quitting the app...");
@@ -59,18 +55,6 @@ function setStopProcessHandler(app, window) {
 
     // Shutdown the http server
     api.disable();
-
-    // Trigger debounced saves right now before closing
-    try {
-      await saveToDisk.flush();
-    } catch (error) {
-      log.error(error);
-    }
-    try {
-      await saveToCloud.flush();
-    } catch (error) {
-      log.error(error);
-    }
 
     // We'll try to execute javascript on the page to see if we're stuck
     let canRunJS = false;
@@ -103,16 +87,6 @@ function setStopProcessHandler(app, window) {
 
     log.debug("Received game information", arg);
     window.gameInfo = { ...arg };
-    await storage.prepareSaveFolders(window);
-
-    const restoreNewest = config.get("onload-restore-newest", true);
-    if (restoreNewest && !isRestoreDisabled) {
-      try {
-        await storage.restoreIfNewerExists(window);
-      } catch (error) {
-        log.error("Could not restore newer file", error);
-      }
-    }
   };
 
   const receivedDisableRestoreHandler = async (event, arg) => {
@@ -131,52 +105,7 @@ function setStopProcessHandler(app, window) {
 
     const { save, ...other } = arg;
     log.silly("Received game saved info", { ...other, save: `${save.length} bytes` });
-
-    if (storage.isAutosaveEnabled()) {
-      saveToDisk(save, arg.fileName);
-    }
-    if (storage.isCloudEnabled()) {
-      const minimumPlaytime = 1000 * 60 * 15;
-      const playtime = window.gameInfo.player.playtime;
-      log.silly(window.gameInfo);
-      if (playtime > minimumPlaytime) {
-        saveToCloud(save);
-      } else {
-        log.debug(`Auto-save to cloud disabled for save game under ${minimumPlaytime}ms (${playtime}ms)`);
-      }
-    }
   };
-
-  const saveToCloud = debounce(
-    async (save) => {
-      log.debug("Saving to Steam Cloud ...");
-      try {
-        const playerId = window.gameInfo.player.identifier;
-        await storage.pushGameSaveToSteamCloud(save, playerId);
-        log.silly("Saved Game to Steam Cloud");
-      } catch (error) {
-        log.error(error);
-        utils.writeToast(window, "Could not save to Steam Cloud.", "error", 5000);
-      }
-    },
-    config.get("cloud-save-min-time", 1000 * 60 * 15),
-    { leading: true },
-  );
-
-  const saveToDisk = debounce(
-    async (save, fileName) => {
-      log.debug("Saving to Disk ...");
-      try {
-        const file = await storage.saveGameToDisk(window, { save, fileName });
-        log.silly(`Saved Game to '${file.replaceAll("\\", "\\\\")}'`);
-      } catch (error) {
-        log.error(error);
-        utils.writeToast(window, "Could not save to disk", "error", 5000);
-      }
-    },
-    config.get("disk-save-min-time", 1000 * 60 * 5),
-    { leading: true },
-  );
 
   log.debug("Adding closing handlers");
   ipcMain.on("push-game-ready", receivedGameReadyHandler);
