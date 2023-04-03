@@ -1,168 +1,117 @@
-import "../../src/Player";
+import type { Corporation } from "../../src/Corporation/Corporation";
+import { initForeignServers } from "../../src/Server/AllServers";
+import { RunningScript } from "../../src/Script/RunningScript";
+import { Script } from "../../src/Script/Script";
+import { loadGame, saveObject } from "../../src/SaveObject";
+import { Player } from "@player";
+import { Factions, initFactions } from "../../src/Faction/Factions";
+import { initAugmentations } from "../../src/Augmentation/AugmentationHelpers";
+import { initPrograms } from "../../src/Programs/Programs";
+import { Sleeve } from "../../src/PersonObjects/Sleeve/Sleeve";
+import { SleeveCrimeWork } from "../../src/PersonObjects/Sleeve/Work/SleeveCrimeWork";
+import { CrimeType, FactionWorkType } from "../../src/Enums";
+import { joinFaction } from "../../src/Faction/FactionHelpers";
+import { FactionWork } from "../../src/Work/FactionWork";
+import { LiteratureNames } from "../../src/Literature/data/LiteratureNames";
+import { NewIndustry } from "../../src/Corporation/Actions";
+import { IndustryType } from "../../src/Corporation/data/Enums";
+import { serverMetadata } from "../../src/Server/data/servers";
+import { setPlayer } from "@player";
+import { PlayerObject } from "../../src/PersonObjects/Player/PlayerObject";
 
-import { loadAllServers, saveAllServers } from "../../src/Server/AllServers";
+describe("Savegame Format Continuity", () => {
+  unrandomize();
+  setupGeneral();
+  setupPlayer();
+  setupServers();
 
-// Direct tests of loading and saving.
-// Tests here should try to be comprehensive (cover as much stuff as possible)
-// without requiring burdensome levels of maintenance when legitimate changes
-// are made.
+  // Calling getSaveString forces all individual parts of the saveObject to initialize.
+  const saveString = saveObject.getSaveString();
 
-// Get a stable clock so we don't have time-based diffs.
-function freezeTime() {
-  // You're about to hack time, are you sure? YES/NO
-  const RealDate = Date;
-  Date = function () {
-    return new RealDate(1678834800000);
-  };
-  Date.now = () => 1678834800000;
+  test("Overall Load/Save Continuity", () => {
+    // Overall save string reliability check: load and resave, expect no change
+    loadGame(saveString);
+    expect(saveString).toEqual(saveObject.getSaveString());
+  });
+  test("Player Snapshot", () => {
+    expect(JSON.parse(saveObject.PlayerSave)).toMatchSnapshot();
+  });
+  test("AllServers Snapshot", () => {
+    expect(JSON.parse(saveObject.AllServersSave)).toMatchSnapshot();
+  });
+  test("Factions Snapshot", () => {
+    expect(JSON.parse(saveObject.FactionsSave)).toMatchSnapshot();
+  });
+});
+
+/** Remove randomness from savedata generation */
+function unrandomize() {
+  // Date info is used to initialize player identifier
+  jest.useFakeTimers().setSystemTime(1681096047580);
+  // Random variation is used by various game mechanics.
+  let randomVal = 0;
+  Math.random = () => (++randomVal % 100) / 100;
 }
 
-// Savegame generated from dev on 2023-03-12, mostly empty game with a few
-// tweaks. A RunningScript was added in-game to test the one bit of
-// non-trivial machinery involved in save/load.
-//
-// Most of the Servers have been removed to reduce space. Default values have
-// been removed both for space, and to test that they are added correctly.
-function loadStandardServers() {
-  loadAllServers(String.raw`{
-  "home": {
-    "ctor": "Server",
-    "data": {
-      "hasAdminRights": true,
-      "hostname": "home",
-      "ip": "67.4.8.1",
-      "isConnectedTo": true,
-      "maxRam": 8,
-      "messages": [
-        "hackers-starting-handbook.lit"
-      ],
-      "organizationName": "Home PC",
-      "programs": [
-        "NUKE.exe"
-      ],
-      "ramUsed": 1.6,
-      "runningScripts": [
-        {
-          "ctor": "RunningScript",
-          "data": {
-            "args": [],
-            "filename": "script.js",
-            "logs": [
-              "I shouldn't even be saved, since I'm temporary"
-            ],
-            "logUpd": true,
-            "offlineRunningTime": 0.01,
-            "onlineRunningTime": 7.210000000000004,
-            "pid": 3,
-            "ramUsage": 1.6,
-            "server": "home",
-            "temporary": true,
-            "dependencies": [
-              {
-                "filename": "script.js",
-                "url": "blob:http://localhost/302fe9e5-2ec3-4ed7-bb5a-4f8f4a85f46d",
-                "moduleSequenceNumber": 2
-              }
-            ]
-          }
-        },
-        {
-          "ctor": "RunningScript",
-          "data": {
-            "args": [],
-            "filename": "script.js",
-            "logs": [
-              "I'm a log line that should be pruned",
-              "Another log line"
-            ],
-            "logUpd": true,
-            "offlineRunningTime": 0.01,
-            "onlineRunningTime": 7.210000000000004,
-            "pid": 2,
-            "ramUsage": 1.6,
-            "server": "home",
-            "dependencies": [
-              {
-                "filename": "script.js",
-                "url": "blob:http://localhost/302fe9e5-2ec3-4ed7-bb5a-4f8f4a85f46d",
-                "moduleSequenceNumber": 2
-              }
-            ]
-          }
-        }
-      ],
-      "scripts": [
-        {
-          "ctor": "Script",
-          "data": {
-            "code": "/** @param {NS} ns */\\nexport async function main(ns) {\\n  return ns.asleep(1000000);\\n}",
-            "filename": "script.js",
-            "module": {},
-            "dependencies": [
-              {
-                "filename": "script.js",
-                "url": "blob:http://localhost/e0abfafd-2c73-42fc-9eea-288c03820c47",
-                "moduleSequenceNumber": 5
-              }
-            ],
-            "ramUsage": 1.6,
-            "server": "home",
-            "moduleSequenceNumber": 5,
-            "ramUsageEntries": [
-              {
-                "type": "misc",
-                "name": "baseCost",
-                "cost": 1.6
-              }
-            ]
-          }
-        }
-      ],
-      "serversOnNetwork": [
-        "n00dles"
-      ],
-      "purchasedByPlayer": true
-    }
-  },
-  "n00dles": {
-    "ctor": "Server",
-    "data": {
-      "hostname": "n00dles",
-      "ip": "61.6.6.2",
-      "maxRam": 4,
-      "organizationName": "Noodle Bar",
-      "serversOnNetwork": [
-        "home"
-      ],
-      "moneyAvailable": 70000,
-      "moneyMax": 1750000,
-      "numOpenPortsRequired": 0,
-      "serverGrowth": 3000
-    }
+/** Setup functions that need to be performed before Player */
+function setupGeneral() {
+  initPrograms();
+  initFactions();
+  initAugmentations();
+}
+
+function setupPlayer() {
+  // This has to be manually reperformed so that it happens after the time and Random overrides
+  setPlayer(new PlayerObject());
+
+  // Creates the home computer
+  Player.init();
+
+  // Bladeburner
+  Player.startBladeburner();
+
+  // Gang
+  joinFaction(Factions["Slum Snakes"]);
+  Player.startGang("Slum Snakes", false);
+
+  // Corporation
+  Player.startCorporation("MyCorp", true);
+  NewIndustry(Player.corporation as Corporation, IndustryType.Restaurant, "Noodle Bar");
+
+  // Faction + work
+  joinFaction(Factions["New Tokyo"]);
+  Player.startWork(
+    new FactionWork({ faction: "New Tokyo", factionWorkType: FactionWorkType.hacking, singularity: true }),
+  );
+
+  Player.sourceFiles.push({ n: 10, lvl: 1 });
+  Player.sleevesFromCovenant = 1;
+  Player.sleeves.push(new Sleeve(), new Sleeve());
+  Player.sleeves[0].startWork(new SleeveCrimeWork(CrimeType.homicide));
+}
+
+function setupServers() {
+  // Home is already set up in SetupPlayer.
+  // We will just keep 1 server each at network level 1 and 2 just so the test isn't gigantic.
+  const home = Player.getHomeComputer();
+  const keptServers = new Set(["n00dles", "zer0"]);
+  for (let i = serverMetadata.length - 1; i >= 0; i--) {
+    if (!keptServers.has(serverMetadata[i].hostname)) serverMetadata.splice(i, 1);
   }
-}`); // Fix confused highlighting `
+  initForeignServers(home);
+  // Add a script to home
+  const script = new Script(
+    "script.js",
+    `/** @param {NS} ns */\nexport async function main(ns) {\n  return ns.asleep(1000000);\n}`,
+    "home",
+  );
+  home.scripts.push(script);
+
+  // Add associated runningscripts on home. The first one is temporary and should not be saved.
+  const runningScripts = [new RunningScript(script, 1.6, ["temporary"]), new RunningScript(script, 1.6, ["permanent"])];
+  runningScripts[0].temporary = true;
+  runningScripts.forEach((runningScript) => home.runScript(runningScript));
+
+  // Add a literature
+  home.messages.push(LiteratureNames.HackersStartingHandbook);
 }
-
-test("load/saveAllServers", () => {
-  // Feed a JSON object through loadAllServers/saveAllServers.
-  // The object is a pruned set of servers that was extracted from a real (dev) game.
-
-  freezeTime();
-  loadStandardServers();
-
-  // Re-stringify with indenting for nicer diffs
-  const result = saveAllServers(/*excludeRunningScripts=*/ false);
-  expect(JSON.stringify(JSON.parse(result), null, 2)).toMatchSnapshot();
-});
-
-test("load/saveAllServers pruning RunningScripts", () => {
-  // Feed a JSON object through loadAllServers/saveAllServers.
-  // The object is a pruned set of servers that was extracted from a real (dev) game.
-
-  freezeTime();
-  loadStandardServers();
-
-  // Re-stringify with indenting for nicer diffs
-  const result = saveAllServers(/*excludeRunningScripts=*/ true);
-  expect(JSON.stringify(JSON.parse(result), null, 2)).toMatchSnapshot();
-});
